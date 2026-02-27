@@ -110,11 +110,9 @@ describe('Parser Tests', () => {
       expect(() => parse("3 +")).toThrow();
       expect(() => parse("+ 3")).toThrow();
       expect(() => parse("3 + + 4")).toThrow();
-      expect(() => parse("3.5")).toThrow(); // Only integers are supported
     });
 
     test('should handle incomplete expressions', () => {
-      expect(() => parse("3 +")).toThrow();
       expect(() => parse("* 5")).toThrow();
       expect(() => parse("3 4")).toThrow(); // Missing operator
     });
@@ -125,6 +123,27 @@ describe('Parser Tests', () => {
       expect(parse("1 - 2")).toBe(-1);
       expect(parse("10 - 4 - 3")).toBe(3);
       expect(parse("7 - 5 - 1")).toBe(1);
+    });
+  });
+
+  describe('Lexical specific features (Comments and Decimals)', () => {
+    test('should ignore one-line comments in expressions', () => {
+      expect(parse("10 + 5 // esto es un comentario")).toBe(15);
+      expect(parse("20 // ignorar esto \n + 10")).toBe(30);
+    });
+
+    test('should handle decimal numbers (floating point)', () => {
+      expect(parse("3.5 + 1.5")).toBe(5);
+      expect(parse("0.5 * 2")).toBe(1);
+      expect(parse("10.0 / 4")).toBe(2.5);
+    });
+  });
+
+  describe('Invalid Token detection', () => {
+    test('should throw error on invalid characters defined by the dot rule', () => {
+      expect(() => parse("5 @ 2")).toThrow();
+      expect(() => parse("10 # 5")).toThrow();
+      expect(() => parse("x = 10")).toThrow();
     });
   });
 

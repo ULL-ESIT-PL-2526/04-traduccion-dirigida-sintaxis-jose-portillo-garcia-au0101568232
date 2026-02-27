@@ -1,10 +1,14 @@
 /* Lexer */
 %lex
-%%
+integer        [0-9]+
+mantisa        ([.][0-9]+)
+exponencial    ([eE][-+]?[0-9]+)
+float          {integer}{mantisa}?{exponencial}?
+
+%%   
 \s+                   { /* skip whitespace */; }
-"(\/\/)(.+?)(?=[\n\r]|\*\))" { /* skip one line comments*/}
-[0-9]+                { return 'NUMBER';       }
-[+-]?([0-9]*[.])?[0-9]+ { return 'NUMBER';     }
+\/\/.*                { /* skip one line comments*/}
+{float}               { return 'NUMBER'        }
 "**"                  { return 'OP';           }
 [-+*/]                { return 'OP';           }
 <<EOF>>               { return 'EOF';          }
