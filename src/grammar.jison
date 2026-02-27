@@ -2,6 +2,7 @@
 %lex
 %%
 \s+                   { /* skip whitespace */; }
+"(\/\/)(.+?)(?=[\n\r]|\*\))" { /* skip one line comments*/}
 [0-9]+                { return 'NUMBER';       }
 "**"                  { return 'OP';           }
 [-+*/]                { return 'OP';           }
