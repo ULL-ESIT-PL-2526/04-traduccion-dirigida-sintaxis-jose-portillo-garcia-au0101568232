@@ -67,3 +67,98 @@ El EOF o final de linea se va a devolver cuando en la entrada se detecte que se 
 Existe para recoger especificamente los carácteres que no se permiten, esto ayuda a poder capturar los errores y hacerle saber al usuario donde se equivoco.
 
 # Práctica 5 Procesadores de Lenguaje Segunda Parte
+### 1 Partiendo de la gramática y las siguientes frases 4.0-2.0*3.0, 2**3**2 y 7-4/2
+
+#### 1.1 Escriba la derivación para cada una de las frases.
+
+- 4.0-2.0*3.0
+```
+L
+→ E eof
+→ E op T eof
+→ E op T op T eof
+→ T op T op T eof
+→ number op T op T eof
+→ 4.0 op T op T eof
+→ 4.0 - T op T eof
+→ 4.0 - number op T eof
+→ 4.0 - 2.0 op T eof
+→ 4.0 - 2.0 * T eof
+→ 4.0 - 2.0 * number eof
+→ 4.0 - 2.0 * 3.0 eof
+```
+
+- 2\**3\**2
+```
+L
+→ E eof
+→ E op T eof
+→ E op T op T eof
+→ T op T op T eof
+→ 2 ** 3 ** 2
+```
+(Se resume en menos derivaciones, pero se comporta igual que el primer apartado)
+
+- 7-4/2
+```
+L
+→ E eof
+→ E op T eof
+→ E op T op T eof
+→ T op T op T eof
+→ 7 - 4 / 2
+```
+(El mismo caso que el segundo apartado)
+
+#### 1.2 Escriba el árbol de análisis sintáctico (parse tree) para cada una de las frases.
+
+- 4.0-2.0*3.0
+```
+        E
+      / | \
+     E  *  T
+   / | \    |
+  E  -  T   3.0
+  |     |
+  T     2.0
+  |
+ 4.0
+```
+
+Este arbol sintáctico al evaluarse de izquierda a derecha quedaría un resultado como (4.0 - 2.0) * 3.0 lo cual no es correcto matemáticamente
+
+- 2\**3\**2
+```
+        E
+      / | \
+     E ** T
+   / | \   |
+  E ** T   2
+  |    |
+  2    3
+```
+
+Este arbol sintáctico al evaluarse de izquierda a derecha quedaría un resultado como (2 ** 3) ** 2 lo cual no es correcto matemáticamente- Sería correcto 2 ** (3 ** 2)
+
+
+- 7-4/2
+```
+        E
+      / | \
+     E  /  T
+   / | \    |
+  E  -  T   2
+  |     |
+  T     4
+  |
+  7
+```
+
+Este arbol sintáctico al evaluarse de izquierda a derecha quedaría un resultado como (7 - 4) / 2 lo cual no es correcto matemáticamente
+
+#### 1.3. ¿En qué orden se evaluan las acciones semánticas para cada una de las frases?
+
+Para todas las frases, es están evaluando de izquierda a derecha sin tener en cuenta la procedencia de los operadores, evaluando lo primero que se encuentra.
+
+
+
