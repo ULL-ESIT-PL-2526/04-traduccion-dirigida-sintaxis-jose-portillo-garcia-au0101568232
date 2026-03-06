@@ -59,4 +59,17 @@ expect(parse("4.0 ** 0.5")).toBeCloseTo(2.0);
 expect(parse("2.0 ** 3.0 + 1.5")).toBeCloseTo(9.5);
 expect(parse("2.5 * 2.0 ** 2.0")).toBeCloseTo(10.0);
 });
+
+test('parentheses', () => {
+expect(parse("(2 + 3) * 4")).toBe(20);
+expect(parse("2 * (3 + 4)")).toBe(14);
+expect(parse("(2 + 3) * (4 + 1)")).toBe(25);
+});
+
+test('should handle floats with correct precedence', () => {
+expect(parse("2.5 + 3.5")).toBeCloseTo(6.0);
+expect(parse("5.5 - 2.2")).toBeCloseTo(3.3);
+expect(parse("2.5 * 2.0")).toBeCloseTo(5.0);
+expect(parse("7.5 / 2.5")).toBeCloseTo(3.0);
+});
 });
