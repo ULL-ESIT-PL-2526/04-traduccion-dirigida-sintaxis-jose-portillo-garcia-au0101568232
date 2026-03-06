@@ -9,8 +9,9 @@ float          {integer}{mantisa}?{exponencial}?
 \s+                   { /* skip whitespace */; }
 \/\/.*                { /* skip one line comments*/}
 {float}               { return 'NUMBER'        }
-"**"                  { return 'OP';           }
-[-+*/]                { return 'OP';           }
+"**"                  { return 'OPOW';           }
+[-+]                  { return 'OPAD';         }
+[*/]                  { return 'OPMU';           }
 <<EOF>>               { return 'EOF';          }
 .                     { return 'INVALID';      }
 /lex
@@ -26,16 +27,32 @@ expressions
     ;
 
 expression
-    : expression OP term
-        { $$ = operate($OP, $expression, $term); }
+    : expression OPAD term
+        { $$ = operate($OPAD, $expression, $term); }
     | term
         { $$ = $term; }
     ;
 
 term
-    : NUMBER
-        { $$ = Number(yytext); }
+    : term OPMU power
+        { $$ =  operate($OPMU, $term, $power); }
+
+    | power
+        { $$ = $power; }
     ;
+
+power
+    : factor OPOW power
+        { $$ = operate($OPOW, $factor, $power); }
+    | factor
+        { $$ = $factor}
+    ;
+
+factor
+    : NUMBER
+        { $$ = Number(yytext);}
+    ;
+
 %%
 
 function operate(op, left, right) {
