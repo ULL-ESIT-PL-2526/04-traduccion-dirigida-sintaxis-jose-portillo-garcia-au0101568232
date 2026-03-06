@@ -39,4 +39,24 @@ expect(parse("10 / 2 / 5")).toBe(1); // (10 / 2) / 5 = 1
 expect(parse("100 - 50 + 25")).toBe(75); // (100 - 50) + 25 = 75
 expect(parse("2 * 3 + 4 * 5")).toBe(26); // (2 * 3) + (4 * 5) = 26
 });
+
+test('floats precedence', () => {
+expect(parse("2.5 * 2 + 1")).toBe(6);
+expect(parse("2 + 2.5 * 2")).toBe(7);
+expect(parse("2.0 ** 3.0")).toBe(8);
+});
+
+test('should handle floats with operator precedence', () => {
+expect(parse("2.5 + 3.0 * 2.0")).toBeCloseTo(8.5); // 2.5 + (3 * 2)
+expect(parse("10.0 - 3.5 * 2.0")).toBeCloseTo(3.0); // 10 - (3.5 * 2)
+expect(parse("5.0 * 2.5 + 1.5")).toBeCloseTo(14.0); // (5 * 2.5) + 1.5
+expect(parse("9.0 / 2.0 + 1.5")).toBeCloseTo(6.0); // (9 / 2) + 1.5
+});
+
+test('should handle exponentiation with floats', () => {
+expect(parse("2.0 ** 3.0")).toBeCloseTo(8.0);
+expect(parse("4.0 ** 0.5")).toBeCloseTo(2.0);
+expect(parse("2.0 ** 3.0 + 1.5")).toBeCloseTo(9.5);
+expect(parse("2.5 * 2.0 ** 2.0")).toBeCloseTo(10.0);
+});
 });
