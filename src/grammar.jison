@@ -9,9 +9,11 @@ float          {integer}{mantisa}?{exponencial}?
 \s+                   { /* skip whitespace */; }
 \/\/.*                { /* skip one line comments*/}
 {float}               { return 'NUMBER'        }
-"**"                  { return 'OPOW';           }
+"**"                  { return 'OPOW';         }
 [-+]                  { return 'OPAD';         }
-[*/]                  { return 'OPMU';           }
+[*/]                  { return 'OPMU';         }
+"("                   { return '(';            }
+")"                   { return ')';            }
 <<EOF>>               { return 'EOF';          }
 .                     { return 'INVALID';      }
 /lex
@@ -51,6 +53,8 @@ power
 factor
     : NUMBER
         { $$ = Number(yytext);}
+    | '(' expression ')'
+        { $$ = $expression}
     ;
 
 %%
